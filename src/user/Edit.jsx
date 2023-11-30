@@ -1,40 +1,41 @@
-import React, { useState } from "react";
-import { db } from "../firebase-config";
-import userDataService from "./userServices";
-import { toast } from "react-toastify";
-import { useNavigate } from "react-router-dom";
-function Add() {
+import React, { useEffect, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import userDataServices from "./userServices";
+function Edit() {
   const navigate = useNavigate();
+  const { id } = useParams();
+  const [singleUser, setsingleUser] = useState(null)
   const [user, setuser] = useState({
     firstName: "",
     lastName: "",
   });
+
   const handlechange = (e) => {
     const { name, value } = e.target;
     setuser((user) => ({ ...user, [name]: value }));
   };
+
   const handlesubmit = async (e) => {
     e.preventDefault();
-    if (user.firstName == "" || user.lastName == "") {
-      toast.error("Please Fill Correctly !", {
-        position: toast.POSITION.TOP_RIGHT,
-      });
-    } else {
-      try {
-        await userDataService.addusers(user);
-        toast.success("User  added Successfully  !", {
-          position: toast.POSITION.TOP_RIGHT,
-        });
-        setuser({
-          firstName: "",
-          lastName: "",
-        });
-        setTimeout(() => {
-          navigate("/");
-        }, 1000);
-      } catch (error) {}
-    }
   };
+
+  useEffect(() => {
+    if (id) {
+        getsingleUserData(id); 
+    }
+  }, [id]);
+
+//   console.log(id);
+  const getsingleUserData = async (id) => {
+    const data = await userDataServices.getuser(id);
+
+    // console.log(data._document.data.value.mapValue.fields);
+    setsingleUser(data._document.data.value.mapValue.fields)
+    console.log(singleUser);
+    
+  };
+
+//   getsingleUserData(id);
 
   return (
     <div>
@@ -50,7 +51,7 @@ function Add() {
             aria-describedby="emailHelp"
             onChange={handlechange}
             name="firstName"
-            value={user.firstName}
+            value={user.firstName && user.firstName}
           />
         </div>
         <div className="mb-3">
@@ -63,7 +64,7 @@ function Add() {
             id="exampleInputPassword1"
             onChange={handlechange}
             name="lastName"
-            value={user.lastName}
+            value={user.lastName && user.lastName}
           />
         </div>
 
@@ -75,4 +76,4 @@ function Add() {
   );
 }
 
-export default Add;
+export default Edit;

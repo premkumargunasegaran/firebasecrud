@@ -17,13 +17,17 @@ class userDataService {
   };
 
   updateuser = (id, updateduser) => {
-    const userDoc = doc(db, "users", id);
+    const userDoc = doc(db, "user", id);
     return updateDoc(userDoc, updateduser);
   };
 
-  deleteuser = (id) => {
-    const userDoc = doc(db, "users", id);
-    return deleteDoc(userDoc);
+  deleteuser = async (id) => {
+    try {
+      const userDoc = doc(db, "user", id);
+      await deleteDoc(userDoc);
+    } catch (error) {
+      console.error("Error deleting user:", error);
+    }
   };
 
   getAllusers = () => {
@@ -31,7 +35,7 @@ class userDataService {
   };
 
   getuser = (id) => {
-    const userDoc = doc(db, "users", id);
+    const userDoc = doc(db, "user", id);
     return getDoc(userDoc);
   };
 }

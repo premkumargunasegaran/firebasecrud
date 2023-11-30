@@ -8,10 +8,9 @@ import "react-toastify/dist/ReactToastify.css";
 import Home from "./user/Home";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import Add from "./user/Add";
+import Edit from "./user/Edit";
 
 function App() {
-
-
   return (
     <>
       <ToastContainer />
@@ -20,6 +19,7 @@ function App() {
         <Routes>
           <Route path="/" element={<Home />}></Route>
           <Route path="/add" element={<Add />}></Route>
+          <Route path="/edit/:id" element={<Edit />}></Route>
         </Routes>
       </BrowserRouter>
     </>
